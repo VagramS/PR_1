@@ -1,0 +1,10 @@
+package simulator.control;
+import simulator.model.Simulator;
+
+public class Controller 
+{
+	public Controler(Simulator sim)
+	{
+		
+	}
+}

@@ -1,0 +1,9 @@
+package simulator.model;
+
+public enum Estado_Animal {
+	NORMAL,
+	MATE,
+	HUNGER,
+	DANGER,
+	DEAD
+}

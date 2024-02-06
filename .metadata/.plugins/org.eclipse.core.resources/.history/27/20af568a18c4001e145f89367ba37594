@@ -1,0 +1,15 @@
+package simulator.model;
+import org.json.JSONObject;
+
+public class Simulator implements JSONable
+{
+	
+	private set_region(int row, int col, Region r)
+	{
+		
+	}
+	public JSONObject as_JSON()
+	{
+		
+	}
+}

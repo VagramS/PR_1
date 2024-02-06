@@ -1,0 +1,48 @@
+package simulator.model;
+import java.util.List;
+
+import org.json.JSONObject;
+
+public class Simulator implements JSONable
+{
+	
+	private set_region(int row, int col, Region r)
+	{
+		
+	}
+	
+	void set_region(int row, int col, JSONObject r_json)
+	{
+		
+	}
+	
+	private void add_animal(Animal a)
+	{
+		
+	}
+	
+	public void add_animal(JSONObject a_json)
+	{
+		
+	}
+	
+	public MapInfo get_map_info()
+	{
+		
+	}
+	
+	public List<? extends Animalnfo> get_animals()
+	{
+		
+	}
+	
+	public double get_time()
+	{
+		
+	}
+	
+	public JSONObject as_JSON()
+	{
+		
+	}
+}

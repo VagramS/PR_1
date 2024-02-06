@@ -1,0 +1,5 @@
+
+public abstract class Animal implements Entity, AnimalInfo
+{
+	protected String _genetic_code
+}

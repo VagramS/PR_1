@@ -1,0 +1,16 @@
+package simulator.model;
+
+public class DefaultRegion implements FoodSupplier
+{
+	public double get_food(Animal a, double dt) 
+	{
+		double food = 0.0;
+		
+		if(a._diet == Diet.HERBIVORE)
+			food = 60.0 * Math.exp (-Math.max(0,n-5.0)*2.0) * dt;
+		else
+			food = 0.0;
+		return food;
+	}
+	
+}

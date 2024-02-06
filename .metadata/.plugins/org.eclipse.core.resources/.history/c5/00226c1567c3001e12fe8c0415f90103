@@ -1,0 +1,28 @@
+package simulator.model;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Region implements Entity, FoodSupplier, RegionInfo
+{
+	protected List<Animal> animals;
+	
+	final void add_animal(Animal a) 
+	{
+		
+	}
+	
+	final void remove_animal(Animal a)
+	{
+		if()
+	}
+	
+	final List<Animal> getAnimals()
+	{
+		return new ArrayList<>(animals);
+	}
+	
+	public JSONObject as_JSON()
+	{
+		
+	}
+}

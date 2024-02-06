@@ -1,0 +1,8 @@
+
+public class Controller 
+{
+	public Controler(Simulator sim)
+	{
+		
+	}
+}

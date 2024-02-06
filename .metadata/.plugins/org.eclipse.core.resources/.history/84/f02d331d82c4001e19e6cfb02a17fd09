@@ -1,0 +1,84 @@
+package simulator.model;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import simulator.factories.Factory;
+
+public class Simulator implements JSONable
+{
+	protected Factory<Animal> _animals_factory;
+	protected Factory<Region> _regions_factory;
+	protected RegionManager _region_mngr;
+	protected List <Animal> animals;
+	protected double time;
+	
+	public Simulator(int cols, int rows, int width, int height, Factory<Animal> animals_factory, Factory<Region> regions_factory)
+	{
+		this._animals_factory = animals_factory;
+		this._regions_factory = regions_factory;
+		this._region_mngr._cols = cols;
+		this._region_mngr._rows = rows;
+		this._region_mngr._width = width;
+		this._region_mngr._height = height;
+		time = 0.0;
+	}
+	
+	private void set_region(int row, int col, Region r)
+	{
+		this._region_mngr._regions[row][col] = r;
+	}
+	
+	void set_region(int row, int col, JSONObject r_json)
+	{
+		
+	}
+	
+	private void add_animal(Animal a)
+	{
+		this.animals.add(a);
+		//to complete
+	}
+	
+	public void add_animal(JSONObject a_json)
+	{
+		
+	}
+	
+	public MapInfo get_map_info()
+	{
+		
+	}
+	
+	public List<? extends AnimalInfo> get_animals()
+	{
+		
+	}
+	
+	public double get_time()
+	{
+		return this.time;
+	}
+	
+	public void advance(double dt)
+	{
+		this.time *= dt;
+		
+		for(int i = 0; i < animals.size(); i++)
+		{
+			if(animals.get(i)._state == State.DEAD)
+			{
+				animals.remove(i);
+			}
+		}
+	}
+	
+	public JSONObject as_JSON()
+	{
+		
+		
+		
+//		"time": t,
+//		"state": s,
+	}
+}

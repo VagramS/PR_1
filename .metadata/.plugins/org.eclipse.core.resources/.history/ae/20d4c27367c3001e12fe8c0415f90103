@@ -1,0 +1,20 @@
+package simulator.model;
+
+public class DefaultRegion extends Region
+{
+	public double get_food(Animal a, double dt) 
+	{
+		double _food = 0.0;
+		int n = animals.size();
+		
+		if(a._diet == Diet.HERBIVORE)
+			_food = 60.0 * Math.exp (-Math.max(0, n - 5.0) * 2.0) * dt; // n es el número de animales herbívoros en la región
+		else
+			_food = 0.0;
+		
+		return _food;
+	}
+
+	public void update(double dt) {}
+	
+}

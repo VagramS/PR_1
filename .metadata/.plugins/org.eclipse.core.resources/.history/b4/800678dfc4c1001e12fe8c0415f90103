@@ -1,0 +1,19 @@
+package simulator.model;
+
+public abstract class Region implements Entity, FoodSupplier, RegionInfo
+{
+	final void add_animal(Animal a) 
+	{
+		
+	}
+	
+	final void remove_animal(Animal a)
+	{
+		
+	}
+	
+	final List<Animal> getAnimals()
+	{
+		
+	}
+}

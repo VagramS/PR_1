@@ -1,0 +1,19 @@
+package simulator.model;
+
+public class RegionManager implements AnimalMapView
+{
+	protected int _cols;
+	protected int _rows;
+	protected int _width;
+	protected int _height;
+	protected int _regionWidth;
+	protected int _regionHeight;
+	
+	public RegionManager(int cols, int rows, int width, int height)
+	{
+		this._cols = cols;
+		this._rows = rows;
+		this._width = width;
+		this._height = height;
+	}
+}

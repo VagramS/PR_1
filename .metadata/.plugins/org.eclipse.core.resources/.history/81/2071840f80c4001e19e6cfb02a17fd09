@@ -1,0 +1,70 @@
+package simulator.model;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import simulator.factories.Factory;
+
+public class Simulator implements JSONable
+{
+	protected Factory<Animal> _animals_factory;
+	protected Factory<Region> _regions_factory;
+	protected RegionManager _region_mngr;
+	protected List <Animal> animals;
+	protected double time;
+	
+	public Simulator(int cols, int rows, int width, int height, Factory<Animal> animals_factory, Factory<Region> regions_factory)
+	{
+		this._animals_factory = animals_factory;
+		time = 0.0;
+	}
+	
+	private void set_region(int row, int col, Region r)
+	{
+		
+	}
+	
+	void set_region(int row, int col, JSONObject r_json)
+	{
+		
+	}
+	
+	private void add_animal(Animal a)
+	{
+		
+	}
+	
+	public void add_animal(JSONObject a_json)
+	{
+		
+	}
+	
+	public MapInfo get_map_info()
+	{
+		
+	}
+	
+	public List<? extends AnimalInfo> get_animals()
+	{
+		
+	}
+	
+	public double get_time()
+	{
+		
+	}
+	
+	public void advance(double dt)
+	{
+		
+	}
+	
+	public JSONObject as_JSON()
+	{
+		
+		
+		
+//		"time": t,
+//		"state": s,
+	}
+}

@@ -1,0 +1,13 @@
+package simulator.model;
+
+import org.json.JSONObject;
+
+public class Simulator implements JSONable
+{
+	
+	
+	public JSONObject as_JSON()
+	{
+		
+	}
+}

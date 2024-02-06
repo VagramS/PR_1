@@ -1,0 +1,20 @@
+
+public class Sheep extends Animal
+{
+	protected _danger_source;
+	protected _danger_strategy;
+	
+	public Sheep(SelectionStrategy mate_strategy, SelectionStrategy danger_strategy, Vector2D pos)
+	{
+		super(this._genetic_code, this._diet, this._sight_range, this.)
+		this._mate_strategy = mate_strategy;
+		this._danger_strategy = danger_strategy;
+		this._speed = 35.0;
+		this._sight_range = 40.0;
+	}
+
+	protected Sheep(Sheep p1, Animal p2)
+	{
+		
+	}
+}
