@@ -10,31 +10,28 @@ public abstract class Region implements Entity, FoodSupplier, RegionInfo
 	protected List<Animal> _animals;
 	
 	public Region(List<Animal> animals)
-	{
-		this._animals = animals;
-	}
 	
 	final void add_animal(Animal a) 
 	{
-		_animals.add(a);
+		animals.add(a);
 	}
 	
 	final void remove_animal(Animal a)
 	{
-		_animals.remove(a);
+		animals.remove(a);
 	}
 	
 	final List<Animal> getAnimals()
 	{
-		return new ArrayList<>(_animals);
+		return new ArrayList<>(animals);
 	}
 	
 	public JSONObject as_JSON()
 	{
 		JSONArray animalsArray = new JSONArray();
 
-        for (int i = 0; i < _animals.size(); i++) 
-            animalsArray.put(_animals.get(i).as_JSON());
+        for (int i = 0; i < animals.size(); i++) 
+            animalsArray.put(animals.get(i).as_JSON());
         
         JSONObject result = new JSONObject();
         result.put("animals", animalsArray);

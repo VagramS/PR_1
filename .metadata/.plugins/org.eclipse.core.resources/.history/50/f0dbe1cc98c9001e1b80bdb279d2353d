@@ -31,13 +31,13 @@ public class Simulator implements JSONable
 	
 	void set_region(int row, int col, JSONObject r_json)
 	{
-		Region r = new Region();
+		
 	}
 	
 	private void add_animal(Animal a)
 	{
 		this.animals.add(a);
-		_region_mngr.register_animal(a);
+		//to complete
 	}
 	
 	public void add_animal(JSONObject a_json)

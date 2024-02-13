@@ -37,7 +37,8 @@ public class Simulator implements JSONable
 	private void add_animal(Animal a)
 	{
 		this.animals.add(a);
-		_region_mngr.register_animal(a);
+		_region_mngr.
+		//to complete
 	}
 	
 	public void add_animal(JSONObject a_json)
