@@ -1,25 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.awt.Taskbar.State"/>
-    <fullyQualifiedTypeName name="org.w3c.dom.Entity"/>
-    <fullyQualifiedTypeName name="simulator.model.AnimalInfo"/>
-    <fullyQualifiedTypeName name="simulator.model.Entity"/>
-    <fullyQualifiedTypeName name="simulator.model.Estado_Animal"/>
-    <fullyQualifiedTypeName name="simulator.model.Simulator"/>
-    <fullyQualifiedTypeName name="java.util.Collections"/>
-    <fullyQualifiedTypeName name="simulator.model.State"/>
-    <fullyQualifiedTypeName name="AnimalMapView.AnimalMapView"/>
-    <fullyQualifiedTypeName name="simulator.model.AnimalMapView"/>
-    <fullyQualifiedTypeName name="simulator.model.SelectionStrategy"/>
-    <fullyQualifiedTypeName name="simulator.model.Diet"/>
-    <fullyQualifiedTypeName name="simulator.misc.Vector2D"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="org.json.JSONObject"/>
-    <fullyQualifiedTypeName name="java.util.Random"/>
-    <fullyQualifiedTypeName name="java.util.function.Predicate"/>
-    <fullyQualifiedTypeName name="java.util.HashMap"/>
-    <fullyQualifiedTypeName name="java.util.Map"/>
-    <fullyQualifiedTypeName name="org.json.JSONArray"/>
-    <fullyQualifiedTypeName name="simulator.misc.Utils"/>
-</qualifiedTypeNameHistroy>
+<qualifiedTypeNameHistroy/>

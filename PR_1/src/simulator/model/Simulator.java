@@ -1,4 +1,5 @@
 package simulator.model;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ public class Simulator implements JSONable
 	void set_region(int row, int col, JSONObject r_json)
 	{
 		Region r = new Region();
+		set_region(row, col, r);
 	}
 	
 	private void add_animal(Animal a)
@@ -42,17 +44,18 @@ public class Simulator implements JSONable
 	
 	public void add_animal(JSONObject a_json)
 	{
-		
+		Animal A = new Animal();
+		add_animal(A);
 	}
 	
 	public MapInfo get_map_info()
 	{
-		
+		return _region_mngr;
 	}
 	
 	public List<? extends AnimalInfo> get_animals()
 	{
-		
+		return Collections.unmodifiableList(this.animals);
 	}
 	
 	public double get_time()
