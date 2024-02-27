@@ -62,7 +62,7 @@ public class Sheep extends Animal
 		return this._dest;
 	}
 
-	public boolean is_pregnent() {
+	public boolean is_pregnant() {
 		if(this._baby == null)
 			return false;
 		else

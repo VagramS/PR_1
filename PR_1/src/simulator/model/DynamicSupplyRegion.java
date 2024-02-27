@@ -24,11 +24,9 @@ public class DynamicSupplyRegion extends Region
 	{
 		int n = 0;
 		
-		for(int i = 0; i < animals.size(); i++)
-		{
-			if(animals.get(i)._diet == Diet.HERBIVORE)
+		for(Animal animal: _animals)
+			if(animal._diet == Diet.HERBIVORE)
 				n++;
-		}
 		
 		if(a._diet == Diet.HERBIVORE)
 			this._food = Math.min(_food, 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt);
@@ -37,5 +35,4 @@ public class DynamicSupplyRegion extends Region
 		
 		return this._food;
 	}
-
 }

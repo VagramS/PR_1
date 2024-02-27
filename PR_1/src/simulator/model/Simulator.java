@@ -2,6 +2,7 @@ package simulator.model;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import simulator.factories.Factory;
@@ -30,10 +31,11 @@ public class Simulator implements JSONable
 		this._region_mngr._regions[row][col] = r;
 	}
 	
-	void set_region(int row, int col, JSONObject r_json)
+	public void set_region(int row, int col, JSONObject r_json) // terminar
 	{
-		Region r = new Region();
-		set_region(row, col, r);
+		JSONArray region_animals = r_json.getJSONArray("animals");
+		Region region = new Region();
+		set_region(row, col, region);
 	}
 	
 	private void add_animal(Animal a)
@@ -42,9 +44,9 @@ public class Simulator implements JSONable
 		_region_mngr.register_animal(a);
 	}
 	
-	public void add_animal(JSONObject a_json)
+	public void add_animal(JSONObject a_json) // terminar
 	{
-		Animal A = new Animal();
+		a_json.
 		add_animal(A);
 	}
 	
@@ -63,7 +65,7 @@ public class Simulator implements JSONable
 		return this.time;
 	}
 	
-	public void advance(double dt)
+	public void advance(double dt) //to check
 	{
 		this.time *= dt;
 		
@@ -72,14 +74,25 @@ public class Simulator implements JSONable
 			if(animals.get(i)._state == State.DEAD)
 			{
 				this.animals.remove(i);
+				_region_mngr.unregister_animal(animals.get(i));
 			}
-		}//to finish
+			animals.get(i).update(dt);
+			_region_mngr.update_animal_region(animals.get(i));
+			_region_mngr.update_all_regions(dt);
+			
+			if(animals.get(i).is_pregnant())
+				add_animal(animals.get(i).deliver_baby());
+		}
 	}
 	
 	public JSONObject as_JSON()
 	{
+		JSONObject object = new JSONObject();
 		
+		object.put("time", this.time);
+		object.put("state", _region_mngr.as_JSON()); // no seguro, pero debe ser asi
 		
+		return object;
 		
 //		"time": t,
 //		"state": s,

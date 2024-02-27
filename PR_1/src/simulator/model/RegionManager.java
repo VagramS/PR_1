@@ -24,14 +24,15 @@ public class RegionManager implements AnimalMapView
 		this._rows = rows;
 		this._width = width;
 		this._height = height;
-		this._regionWidth = width / cols;
-		this._regionHeight = height / rows;
+		this._regionWidth = _width / _cols + (width % cols != 0 ? 1 : 0);
+		this._regionHeight = _height / _rows + (height % rows != 0 ? 1 : 0);
 		
 		this._regions = new Region[rows][cols];
 		
-		for (int i = 0; i < rows; i++) {
+		for (int i = 0; i < rows; i++) 
+		{
             for (int j = 0; j < cols; j++) {
-                this._regions[i][j] = new DefaultRegion();
+                this._regions[i][j] = new DefaultRegion(null);
             }
         }
 		
@@ -40,7 +41,25 @@ public class RegionManager implements AnimalMapView
 	
 	void set_region(int row, int col, Region r)
 	{
-		
+		if(col >= 0 && col < _cols && row >= 0 && row < _rows)
+		{
+			Region old_reg = _regions[row][col];
+			_regions[row][col] = r;
+			
+			if(old_reg != null)
+			{
+				List <Animal> toTransfer = old_reg.getAnimals();
+				
+				for(Animal a: toTransfer)
+				{
+					r.add_animal(a);
+					old_reg.remove_animal(a);
+					_animal_region.put(a, r);
+				}
+			}
+		}
+		else
+			System.out.println("Specified location is out of map.");
 	}
 	
 	void register_animal(Animal a)
@@ -50,7 +69,15 @@ public class RegionManager implements AnimalMapView
 	
 	void unregister_animal(Animal a)
 	{
-		
+		if(_animal_region.containsKey(a))
+		{
+			Region region = _animal_region.get(a);
+			
+			if(region != null)
+				region.remove_animal(a);
+			
+			_animal_region.remove(a);
+		}
 	}
 	
 	 void update_animal_region(Animal a)
@@ -60,6 +87,7 @@ public class RegionManager implements AnimalMapView
 	 
 	 public double get_food(Animal a, double dt)
 	 {
+		return dt;
 		 
 	 }
 	 
@@ -70,6 +98,7 @@ public class RegionManager implements AnimalMapView
 	 
 	 public List<Animal> get_animals_in_range(Animal a, Predicate<Animal> filter)
 	 {
+		return null;
 		 
 	 }
 	 
@@ -94,6 +123,11 @@ public class RegionManager implements AnimalMapView
         res.put("regiones", regArray);
         
         return res;
+        
+//        	"regiones":[𝑜1, ,...],
+//        	"row": i,
+//        	"col": j,
+//        	"data": r
 	 }
 
 	public int get_cols() {

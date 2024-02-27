@@ -1,15 +1,21 @@
 package simulator.model;
 
+import java.util.List;
+
 public class DefaultRegion extends Region
 {
+	public DefaultRegion(List<Animal> animals) {
+		super();
+	}
+
 	public double get_food(Animal a, double dt) 
 	{
 		double _food = 0.0;
 		int n = 0;
 		
-		for(int i = 0; i < animals.size(); i++)
+		for(Animal animal: _animals)
 		{
-			if(animals.get(i)._diet == Diet.HERBIVORE)
+			if(animal._diet == Diet.HERBIVORE)
 				n++;
 		}
 		

@@ -9,9 +9,9 @@ public abstract class Region implements Entity, FoodSupplier, RegionInfo
 {
 	protected List<Animal> _animals;
 	
-	public Region(List<Animal> animals)
+	public Region()
 	{
-		this._animals = animals;
+		this._animals = new ArrayList<>();
 	}
 	
 	final void add_animal(Animal a) 
@@ -27,6 +27,16 @@ public abstract class Region implements Entity, FoodSupplier, RegionInfo
 	final List<Animal> getAnimals()
 	{
 		return new ArrayList<>(_animals);
+	}
+	
+	public void update(double dt)
+	{
+		
+	}
+	
+	double get_food(Animal a, double dt)
+	{
+		
 	}
 	
 	public JSONObject as_JSON()
