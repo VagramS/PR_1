@@ -31,7 +31,7 @@ public abstract class Builder<T>
 		return info;
 	}
 	
-	protected void fill_in_data(JSONObject o) 
+	protected void fill_in_data(JSONObject o) // terminar
 	{
 		
 	}

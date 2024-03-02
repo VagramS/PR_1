@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -64,7 +65,15 @@ public class RegionManager implements AnimalMapView
 	
 	void register_animal(Animal a)
 	{
+		int col = (int)a._pos.getX() / this.get_region_width();
+		int row = (int)a._pos.getY() / this.get_region_height();
 		
+		if(col >= 0 && col < _cols && row >= 0 && row < _rows)
+		{
+			Region reg = this._regions[row][col];
+			this._animal_region.put(a, reg);
+			a.init(this);
+		}
 	}
 	
 	void unregister_animal(Animal a)
@@ -82,24 +91,49 @@ public class RegionManager implements AnimalMapView
 	
 	 void update_animal_region(Animal a)
 	 {
-		 
+		 if(_animal_region.containsKey(a))
+		 {
+			 Region reg_anim = _animal_region.get(a);
+			 _animal_region.remove(a);
+			 reg_anim.remove_animal(a);
+		 }
 	 }
 	 
 	 public double get_food(Animal a, double dt)
 	 {
-		return dt;
-		 
+		Region region = _animal_region.get(a);
+		
+		if(region != null)
+			return region.get_food(a, dt);
+		else
+		{
+			System.out.println("This animal isn't included in any region");
+			return 0;
+		}
 	 }
 	 
 	 void update_all_regions(double dt)
 	 {
-		 
+		 for(int i = 0; i < _rows; i++)
+		 {
+			 for(int j = 0; j < _cols; j++)
+			 {
+				 if(_regions[i][j] != null)
+					 _regions[i][j].update(dt);
+			 }
+		 }
 	 }
 	 
 	 public List<Animal> get_animals_in_range(Animal a, Predicate<Animal> filter)
 	 {
-		return null;
-		 
+		 List<Animal> animalsInRange = _animal_region.keySet().stream()
+				    // First filter: Check if the animal is within the sight range of 'a'
+				    .filter(animal -> animal.get_position().distanceTo(a.get_position()) <= a.get_sight_range())
+				    // Second filter: Apply the additional provided filter
+				    .filter(filter)
+				    .collect(Collectors.toList());
+
+		 return animalsInRange;
 	 }
 	 
 	 public JSONObject as_JSON()

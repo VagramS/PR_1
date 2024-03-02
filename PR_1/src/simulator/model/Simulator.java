@@ -31,11 +31,10 @@ public class Simulator implements JSONable
 		this._region_mngr._regions[row][col] = r;
 	}
 	
-	public void set_region(int row, int col, JSONObject r_json) // terminar
+	public void set_region(int row, int col, JSONObject r_json)
 	{
-		JSONArray region_animals = r_json.getJSONArray("animals");
-		Region region = new Region();
-		set_region(row, col, region);
+		Region R = _regions_factory.create_instance(r_json);
+		set_region(row, col, R);
 	}
 	
 	private void add_animal(Animal a)
@@ -44,9 +43,9 @@ public class Simulator implements JSONable
 		_region_mngr.register_animal(a);
 	}
 	
-	public void add_animal(JSONObject a_json) // terminar
+	public void add_animal(JSONObject a_json)
 	{
-		a_json.
+		Animal A = _animals_factory.create_instance(a_json);
 		add_animal(A);
 	}
 	

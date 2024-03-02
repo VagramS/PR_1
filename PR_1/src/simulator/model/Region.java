@@ -29,16 +29,6 @@ public abstract class Region implements Entity, FoodSupplier, RegionInfo
 		return new ArrayList<>(_animals);
 	}
 	
-	public void update(double dt)
-	{
-		
-	}
-	
-	double get_food(Animal a, double dt)
-	{
-		
-	}
-	
 	public JSONObject as_JSON()
 	{
 		JSONArray animalsArray = new JSONArray();

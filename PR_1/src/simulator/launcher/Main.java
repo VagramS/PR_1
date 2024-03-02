@@ -29,11 +29,11 @@ public class Main {
 		}
 
 		public String get_tag() {
-			return _tag;
+			return this._tag;
 		}
 
 		public String get_desc() {
-			return _desc;
+			return this._desc;
 		}
 	}
 
@@ -123,16 +123,21 @@ public class Main {
 		}
 	}
 
-	private static void init_factories() {
+	private static void init_factories() // terminar
+	{
+		
+		
 	}
 
-	private static JSONObject load_JSON_file(InputStream in) {
-		return new JSONObject(new JSONTokener(in));
-	}
+		private static JSONObject load_JSON_file(InputStream in) {
+			return new JSONObject(new JSONTokener(in));
+		}
 
 
-	private static void start_batch_mode() throws Exception {
+	private static void start_batch_mode() throws Exception // terminar
+	{
 		InputStream is = new FileInputStream(new File(_in_file));
+		load_JSON_file(is);
 	}
 
 	private static void start_GUI_mode() throws Exception {

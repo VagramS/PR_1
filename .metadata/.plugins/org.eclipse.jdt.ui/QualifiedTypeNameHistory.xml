@@ -5,4 +5,7 @@
     <fullyQualifiedTypeName name="java.io.OutputStream"/>
     <fullyQualifiedTypeName name="java.io.PrintStream"/>
     <fullyQualifiedTypeName name="org.json.JSONArray"/>
+    <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
+    <fullyQualifiedTypeName name="simulator.model.Animal"/>
+    <fullyQualifiedTypeName name="simulator.model.Wolf"/>
 </qualifiedTypeNameHistroy>

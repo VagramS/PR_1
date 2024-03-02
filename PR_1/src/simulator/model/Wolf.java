@@ -21,6 +21,14 @@ public class Wolf extends Animal
 		_hunt_target = null;
 	}
 	
+	public void mantain_in_range(double value, int lower_limit, int upper_limit)
+	{
+		if(value > upper_limit)
+			value = upper_limit;
+		else if(value < lower_limit)
+			value = lower_limit;
+	}
+	
 	public void update(double dt) 
 	{
 		if(this.get_state() != State.DEAD)
@@ -34,12 +42,9 @@ public class Wolf extends Animal
 				this._state = State.DEAD;
 			
 			this._energy +=	_region_mngr.get_food(this, dt);
-			if(this._energy > 100.0)
-				this._energy = 100.0;
-			else if(this._energy < 0.0)
-				this._energy = 0.0;
+			mantain_in_range(this.get_energy(), 0, 100);
 			
-			
+			// NORMAL
 			if(this._state == State.NORMAL)
 			{
 				if(this._pos.distanceTo(_dest) < 8.0)
@@ -54,17 +59,11 @@ public class Wolf extends Animal
 				this._age += dt;
 				this._energy -= 18.0 * dt;
 				
-				if(this._energy > 100.0)
-					this._energy = 100.0;
-				else if(this._energy < 0.0)
-					this._energy = 0.0;
+				mantain_in_range(this.get_energy(), 0, 100);
 				
 				this._desire += 30.0 * dt;
 				
-				if(this._desire > 100.0)
-					this._desire = 100.0;
-				else if(this._desire < 0.0)
-					this._desire = 0.0;
+				mantain_in_range(this._desire, 0, 100);
 				
 				if(this._energy < 50.0)
 					this._state = State.HUNGER;
@@ -72,6 +71,7 @@ public class Wolf extends Animal
 					this._state = State.MATE;
 				
 			}
+			// HUNGER
 			else if(this._state == State.HUNGER)
 			{
 //				Si _hunt_target es null, o no es null pero su estado es DEAD o está fuera del campo visual, buscar
@@ -79,8 +79,11 @@ public class Wolf extends Animal
 				
 				
 			}
+			// MATE
 			else if(this._state == State.MATE)
 			{
+				if(_mate_target != null && (_mate_target.get_state() == State.DEAD)) // to finish
+					this._mate_target = null;
 				
 			}
 		}
