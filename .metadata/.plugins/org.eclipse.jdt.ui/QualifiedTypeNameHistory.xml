@@ -8,4 +8,9 @@
     <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
     <fullyQualifiedTypeName name="simulator.model.Animal"/>
     <fullyQualifiedTypeName name="simulator.model.Wolf"/>
+    <fullyQualifiedTypeName name="simulator.model.DynamicSupplyRegion"/>
+    <fullyQualifiedTypeName name="simulator.model.DefaultRegion"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.util.LinkedList"/>
 </qualifiedTypeNameHistroy>

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DefaultRegion extends Region
 {
-	public DefaultRegion(List<Animal> animals) {
+	public DefaultRegion() {
 		super();
 	}
 

@@ -33,7 +33,7 @@ public class RegionManager implements AnimalMapView
 		for (int i = 0; i < rows; i++) 
 		{
             for (int j = 0; j < cols; j++) {
-                this._regions[i][j] = new DefaultRegion(null);
+                this._regions[i][j] = new DefaultRegion();
             }
         }
 		

@@ -10,7 +10,6 @@ public class SelectClosestBuilder<T> extends Builder<T> {
 
 	@Override
 	protected T create_instance(JSONObject data) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

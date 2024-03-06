@@ -40,6 +40,7 @@ public class Main {
 	// default values for some parameters
 	//
 	private final static Double _default_time = 10.0; // in seconds
+	private final static Double _default_delta_time = 0.03;
 
 	// some attributes to stores values corresponding to command-line parameters
 	//
@@ -82,18 +83,27 @@ public class Main {
 
 	private static Options build_options() {
 		Options cmdLineOptions = new Options();
+		
+		// delta time
+		cmdLineOptions.addOption(Option.builder("dt").longOpt("delta-time").hasArg()
+				.desc("A double representing actual time, in seconds, per simulation step. Default value: " + _default_delta_time + ".").build());
 
 		// help
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message.").build());
 
 		// input file
-		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("A configuration file.").build());
-
+		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Initial configuration file.").build());
+		
+		// output file
+		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Output file, where output is written.").build());
+		
+		// simple viewer
+		cmdLineOptions.addOption(Option.builder("sv").longOpt("simple-viewer")
+				.desc("Show the viewer window in console mode.").build());
+		
 		// steps
 		cmdLineOptions.addOption(Option.builder("t").longOpt("time").hasArg()
-				.desc("An real number representing the total simulation time in seconds. Default value: "
-						+ _default_time + ".")
-				.build());
+				.desc("An real number representing the total simulation time in seconds. Default value: " + _default_time + ".").build());
 
 		return cmdLineOptions;
 	}
@@ -129,9 +139,9 @@ public class Main {
 		
 	}
 
-		private static JSONObject load_JSON_file(InputStream in) {
-			return new JSONObject(new JSONTokener(in));
-		}
+	private static JSONObject load_JSON_file(InputStream in) {
+		return new JSONObject(new JSONTokener(in));
+	}
 
 
 	private static void start_batch_mode() throws Exception // terminar

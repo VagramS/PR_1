@@ -22,7 +22,10 @@ public class Sheep extends Animal
 	
 	public void update(double dt) 
 	{
-		
+		if(this.get_state() != State.DEAD)
+		{
+			
+		}
 		
 	}
 
