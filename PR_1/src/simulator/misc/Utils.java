@@ -17,4 +17,7 @@ public class Utils {
 		return value * (1 + t);
 	}
 
+	public static double nextDouble(double min, double max) {
+		return min + (_rand.nextDouble() * (max - min));
+	}
 }

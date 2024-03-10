@@ -1,15 +1,16 @@
 package simulator.factories;
 
 import org.json.JSONObject;
+import simulator.model.SelectionStrategy;
 
-public class SelectClosestBuilder<T> extends Builder<T> {
+public class SelectClosestBuilder extends Builder<SelectionStrategy> {
 
-	public SelectClosestBuilder(String desc) {
-		super("closest", desc);
+	public SelectClosestBuilder() {
+		super("closest", "Elige el animal mas cercano");
 	}
 
 	@Override
-	protected T create_instance(JSONObject data) {
+	protected SelectionStrategy create_instance(JSONObject data) {
 		return null;
 	}
 

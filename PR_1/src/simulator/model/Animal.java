@@ -2,15 +2,8 @@ package simulator.model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import simulator.misc.Utils;
 import simulator.misc.Vector2D;
-import simulator.model.AnimalInfo;
-import simulator.model.AnimalMapView;
-import simulator.model.Diet;
-import simulator.model.Entity;
-import simulator.model.SelectionStrategy;
-import simulator.model.State;
 
 public abstract class Animal implements Entity, AnimalInfo {
 	final static double INIT_ENERGY = 100.0;
@@ -44,6 +37,7 @@ public abstract class Animal implements Entity, AnimalInfo {
 
 		this._state = State.NORMAL;
 		this._energy = INIT_ENERGY;
+		this._age = 0.0;
 		this._desire = 0.0;
 		this._dest = null;
 		this._mate_target = null;
@@ -62,40 +56,29 @@ public abstract class Animal implements Entity, AnimalInfo {
 		this._diet = p1._diet;
 		this._energy = (p1._energy + p2._energy) / 2;
 		this._mate_strategy = p2._mate_strategy;
-		this._pos = p1.get_position()
-				.plus(Vector2D.get_random_vector(-1, 1).scale(60.0 * (Utils._rand.nextGaussian() + 1)));
+		this._pos = p1.get_position().plus(Vector2D.get_random_vector(-1, 1).scale(60.0 * (Utils._rand.nextGaussian() + 1)));
 		this._sight_range = Utils.get_randomized_parameter((p1.get_sight_range() + p2.get_sight_range()) / 2, 0.2);
 		this._speed = Utils.get_randomized_parameter((p1.get_speed() + p2.get_speed()) / 2, 0.2);
 	}
 
 	void init(AnimalMapView reg_mngr) {
+		double x, y;
 		this._region_mngr = reg_mngr;
 
 		if (_pos == null) {
-			double x = 0 + (double) (Math.random() * (((_region_mngr.get_width() - 1) - 0) + 1));
-			double y = 0 + (double) (Math.random() * (((_region_mngr.get_height() - 1) - 0) + 1));
-			Vector2D pos = new Vector2D(x, y);
-			_pos = pos;
-		} else {
-			double x = Utils._rand.nextDouble(800);
-			double y = Utils._rand.nextDouble(600);
-
-			while (x >= _region_mngr.get_width())
-				x = (x - _region_mngr.get_width());
-			while (x < 0)
-				x = (x + _region_mngr.get_width());
-
-			while (y >= _region_mngr.get_height())
-				y = (y - _region_mngr.get_height());
-			while (y < 0)
-				y = (y + _region_mngr.get_height());
-
+			x = Utils.nextDouble(0, _region_mngr.get_width() - 1);
+			y = Utils.nextDouble(0, _region_mngr.get_height() - 1);
+		} 
+		else {
+			x = Utils.constrain_value_in_range(_pos.getX(), 0, _region_mngr.get_width() - 1);
+			y = Utils.constrain_value_in_range(_pos.getY(), 0, _region_mngr.get_height() - 1);
 		}
+		_pos = new Vector2D(x, y);
 
-		double _x = Utils._rand.nextDouble(800); // cambiar valores luego
-		double _y = Utils._rand.nextDouble(600);
-		Vector2D dest = new Vector2D(_x, _y);
-		_dest = dest;
+		// Elige una posicion aleatoria para _dest
+		double destX = Utils.nextDouble(0, _region_mngr.get_width() - 1);
+		double destY = Utils.nextDouble(0, _region_mngr.get_height() - 1);
+		_dest = new Vector2D(destX, destY);
 	}
 
 	Animal deliver_baby() {

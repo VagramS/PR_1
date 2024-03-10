@@ -2,10 +2,10 @@ package simulator.factories;
 
 import org.json.JSONObject;
 
-public class SelectYoungestBuilder<T> extends Builder<T>{
+public class SelectYoungestBuilder<T> extends Builder<T> {
 
-	public SelectYoungestBuilder(String desc) {
-		super("youngest", desc);
+	public SelectYoungestBuilder() {
+		super("youngest", "Elige el animal mas joven");
 	}
 
 	@Override

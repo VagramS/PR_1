@@ -1,15 +1,16 @@
 package simulator.factories;
 
 import org.json.JSONObject;
+import simulator.model.SelectionStrategy;
 
-public class SelectFirstBuilder<T> extends Builder<T>{
+public class SelectFirstBuilder extends Builder<SelectionStrategy> {
 
-	public SelectFirstBuilder(String desc) {
-		super("first", desc);
+	public SelectFirstBuilder() {
+		super("first", "Elige el primer animal de la region");
 	}
 
 	@Override
-	protected T create_instance(JSONObject data){
+	protected SelectionStrategy create_instance(JSONObject data) {
 		return null;
 	}
 
