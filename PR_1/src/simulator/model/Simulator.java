@@ -14,7 +14,8 @@ public class Simulator implements JSONable {
 	protected List<Animal> animals;
 	protected double time;
 
-	public Simulator(int cols, int rows, int width, int height, Factory<Animal> animals_factory,Factory<Region> regions_factory) {
+	public Simulator(int cols, int rows, int width, int height, Factory<Animal> animals_factory,
+			Factory<Region> regions_factory) {
 		this._animals_factory = animals_factory;
 		this._regions_factory = regions_factory;
 		this._region_mngr = new RegionManager(cols, rows, width, height);
@@ -53,34 +54,33 @@ public class Simulator implements JSONable {
 		return this.time;
 	}
 
-	public void advance(double dt) 
-	{
+	public void advance(double dt) {
 		this.time += dt;
 
 		List<Animal> deadAnimals = new ArrayList<>();
-	    for (Animal animal : this.animals) {
-	        animal.update(dt);
-	        if (animal.get_state() == State.DEAD) {
-	            deadAnimals.add(animal);
-	        }
-	    }
-	    for (Animal deadAnimal : deadAnimals) {
-	        this.animals.remove(deadAnimal);
-	        this._region_mngr.unregister_animal(deadAnimal);
-	    }
-	    
-	    _region_mngr.update_all_regions(dt);
+		for (Animal animal : this.animals) {
+			animal.update(dt);
+			if (animal.get_state() == State.DEAD) {
+				deadAnimals.add(animal);
+			}
+		}
+		for (Animal deadAnimal : deadAnimals) {
+			this.animals.remove(deadAnimal);
+			this._region_mngr.unregister_animal(deadAnimal);
+		}
 
-	    List<Animal> newBabies = new ArrayList<>();
-	    for (Animal animal : animals) {
-	        if (animal.is_pregnant()) {
-	            Animal baby = animal.deliver_baby();
-	            if (baby != null) 
-	                newBabies.add(baby);
-	        }
-	    }
-	    for (Animal baby : newBabies) 
-	        add_animal(baby);
+		_region_mngr.update_all_regions(dt);
+
+		List<Animal> newBabies = new ArrayList<>();
+		for (Animal animal : animals) {
+			if (animal.is_pregnant()) {
+				Animal baby = animal.deliver_baby();
+				if (baby != null)
+					newBabies.add(baby);
+			}
+		}
+		for (Animal baby : newBabies)
+			add_animal(baby);
 	}
 
 	public JSONObject as_JSON() {

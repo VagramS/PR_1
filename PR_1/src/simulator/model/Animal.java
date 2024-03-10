@@ -57,7 +57,8 @@ public abstract class Animal implements Entity, AnimalInfo {
 		this._diet = p1._diet;
 		this._energy = (p1._energy + p2._energy) / 2;
 		this._mate_strategy = p2._mate_strategy;
-		this._pos = p1.get_position().plus(Vector2D.get_random_vector(-1, 1).scale(60.0 * (Utils._rand.nextGaussian() + 1)));
+		this._pos = p1.get_position()
+				.plus(Vector2D.get_random_vector(-1, 1).scale(60.0 * (Utils._rand.nextGaussian() + 1)));
 		this._sight_range = Utils.get_randomized_parameter((p1.get_sight_range() + p2.get_sight_range()) / 2, 0.2);
 		this._speed = Utils.get_randomized_parameter((p1.get_speed() + p2.get_speed()) / 2, 0.2);
 	}
@@ -69,14 +70,12 @@ public abstract class Animal implements Entity, AnimalInfo {
 		if (_pos == null) {
 			x = Utils.nextDouble(0, _region_mngr.get_width() - 1);
 			y = Utils.nextDouble(0, _region_mngr.get_height() - 1);
-		} 
-		else {
+		} else {
 			x = Utils.constrain_value_in_range(_pos.getX(), 0, _region_mngr.get_width() - 1);
 			y = Utils.constrain_value_in_range(_pos.getY(), 0, _region_mngr.get_height() - 1);
 		}
 		_pos = new Vector2D(x, y);
 
-		// Elige una posicion aleatoria para _dest
 		double destX = Utils.nextDouble(0, _region_mngr.get_width() - 1);
 		double destY = Utils.nextDouble(0, _region_mngr.get_height() - 1);
 		_dest = new Vector2D(destX, destY);

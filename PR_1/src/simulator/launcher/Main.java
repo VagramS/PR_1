@@ -33,7 +33,7 @@ public class Main {
 	private static int cols;
 	private static int width;
 	private static int height;
-	
+
 	private enum ExecMode {
 		BATCH("batch", "Batch mode"), GUI("gui", "Graphical User Interface mode");
 
@@ -63,7 +63,9 @@ public class Main {
 	//
 	private static String _out_file = null;
 	private static Double _time = null;
+	private static Double _delta_time = null;
 	private static String _in_file = null;
+	private static boolean _simpleViewer = false;
 	private static ExecMode _mode = ExecMode.BATCH;
 
 	private static void parse_args(String[] args) {
@@ -80,7 +82,9 @@ public class Main {
 			parse_help_option(line, cmdLineOptions);
 			parse_in_file_option(line);
 			parse_time_option(line);
+			parse_delta_time_option(line);
 			parse_out_file_option(line);
+			parse_simple_viewer_option(line);
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
@@ -150,7 +154,7 @@ public class Main {
 
 	private static void parse_out_file_option(CommandLine line) {
 		_out_file = line.getOptionValue("o");
-		if (_out_file == null) 
+		if (_out_file == null)
 			System.err.println("Output file not specified. Using default output location.");
 	}
 
@@ -161,6 +165,23 @@ public class Main {
 			assert (_time >= 0);
 		} catch (Exception e) {
 			throw new ParseException("Invalid value for time: " + t);
+		}
+	}
+	
+	private static void parse_simple_viewer_option(CommandLine line) {
+		if (line.hasOption("sv"))
+			_simpleViewer = true;
+		else
+			_simpleViewer = false;
+	}
+	
+	private static void parse_delta_time_option(CommandLine line) throws ParseException {
+		String dt = line.getOptionValue("dt", _default_delta_time.toString());
+		try {
+			_delta_time = Double.parseDouble(dt);
+			assert (_delta_time >= 0);
+		} catch (Exception e) {
+			throw new ParseException("Invalid value for delta-time: " + dt);
 		}
 	}
 
@@ -187,26 +208,30 @@ public class Main {
 		InputStream is = new FileInputStream(new File(_in_file));
 		JSONObject simulationData = load_JSON_file(is);
 		width = simulationData.getInt("width");
-	    height = simulationData.getInt("height");
-	    cols = simulationData.getInt("cols");
-	    rows = simulationData.getInt("rows");
+		height = simulationData.getInt("height");
+		cols = simulationData.getInt("cols");
+		rows = simulationData.getInt("rows");
 		is.close();
-		
-		
 
-		String OutputFileName = "myout.json";
-		OutputStream os = new FileOutputStream(OutputFileName);
+		String outputFileName = _out_file != null ? _out_file : "resources/tmp/myout.json";
+		OutputStream os = new FileOutputStream(outputFileName);
 		PrintStream print_stream = new PrintStream(os);
 
 		Simulator _sim = new Simulator(cols, rows, width, height, _animals_factory, _regions_factory);
 		Controller control = new Controller(_sim);
 		control.load_data(simulationData);
 
-		boolean simpleViewer = true;
+		boolean simpleViewer = _simpleViewer;
 		double time = _time != null ? _time : _default_time;
-		double delta_time = _default_delta_time;
+		double delta_time = _delta_time != null ? _delta_time : _default_delta_time;
+		control.run(time, delta_time, simpleViewer, print_stream);
 
-		control.run(time, delta_time, simpleViewer, os);
+		List<? extends AnimalInfo> finalAnimals = _sim.get_animals();
+		finalAnimals.forEach(animal -> {
+			JSONObject animalJson = animal.as_JSON();
+			print_stream.println(animalJson.toString(4));
+		});
+
 		print_stream.close();
 	}
 

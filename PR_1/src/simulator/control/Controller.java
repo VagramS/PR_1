@@ -59,10 +59,10 @@ public class Controller {
 		}
 
 		JSONObject init_state = _sim.as_JSON();
-		
+
 		while (_sim.get_time() < t) {
 			_sim.advance(dt);
-			if (sv) 
+			if (sv)
 				view.update(to_animals_info(_sim.get_animals()), _sim.get_time(), dt);
 		}
 		JSONObject final_state = _sim.as_JSON();
@@ -71,14 +71,14 @@ public class Controller {
 		res.put("in", init_state);
 		res.put("out", final_state);
 
-		if (sv) {
-			try {
-				PrintStream p = new PrintStream(out);
-				p.println(res.toString(4));
-			} catch (Exception e) {
+		try {
+			PrintStream p = new PrintStream(out);
+			p.println(res.toString(4));
+		} 
+		catch (Exception e) {
 				e.printStackTrace();
-			}
 		}
+		
 		if (sv)
 			view.close();
 	}

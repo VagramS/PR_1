@@ -34,7 +34,7 @@ public class Sheep extends Animal {
 
 	private Animal findNewDangerSource() {
 		List<Animal> dangers = _region_mngr.get_animals_in_range(this, animal -> animal.get_diet() == Diet.CARNIVORE);
-		 return _danger_source = _danger_strategy.select(this, dangers);
+		return _danger_source = _danger_strategy.select(this, dangers);
 	}
 
 	private void handleNormalState(double dt) {
@@ -45,20 +45,19 @@ public class Sheep extends Animal {
 			_dest = new Vector2D(x, y);
 		}
 
-		// 1.2
-		move(_speed * dt);
+		move(_speed * dt * Math.exp((_energy - 100.0) * 0.007));
 
-		// 1.3
 		_age += dt;
-		_energy = maintain_in_range(_energy - 10.0 * dt, 0.0, 100.0);
-		_desire = maintain_in_range(_desire + 20.0 * dt, 0.0, 100.0);
+		_energy = maintain_in_range(_energy - 20.0 * dt, 0.0, 100.0);
+		_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
 
-		// 1.4
-		if (_energy < 50.0) 
-			_state = State.HUNGER;
-		else if (_desire > 65.0) 
-			_state = State.MATE;
+		if (this._danger_source == null)
+			findNewDangerSource();
 		
+		if (this._danger_source == null && this._desire > 65.0)
+			_state = State.MATE;
+		else if (this._danger_source != null)
+			_state = State.DANGER;
 	}
 
 	private void handleDangerState(double dt) {
@@ -75,11 +74,11 @@ public class Sheep extends Animal {
 			_dest = _pos.plus(escapeDirection.scale(100));
 
 			// 2.2
-			move(2.0 * _speed * dt);
+			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
 
 			// 2.3
 			_age += dt;
-			_energy = maintain_in_range(_energy - 24.0 * dt, 0.0, 100.0);
+			_energy = maintain_in_range(_energy - 20.0 * dt, 0.0, 100.0);
 			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
 		}
 
@@ -99,35 +98,34 @@ public class Sheep extends Animal {
 	private void handleMateState(double dt) {
 		// 1.
 		if (_mate_target != null && (_mate_target.get_state() == State.DEAD
-						|| _pos.distanceTo(_mate_target.get_position()) > _sight_range))
+				|| _pos.distanceTo(_mate_target.get_position()) > _sight_range))
 			_mate_target = null;
 
 		// 2.
 		if (_mate_target == null) {
-			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this, animal -> animal.get_genetic_code().equals(this._genetic_code));
-					_mate_target = _mate_strategy.select(this, potentialMates);
+			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this,
+					animal -> animal.get_genetic_code().equals(this._genetic_code));
+			_mate_target = _mate_strategy.select(this, potentialMates);
 
-				if (_mate_target == null)
-					handleNormalState(dt);
+			if (_mate_target == null)
+				handleNormalState(dt);
 		}
-		if (_mate_target != null) 
-		{
+		if (_mate_target != null) {
 			// 2.1.
 			_dest = _mate_target.get_position();
 
 			// 2.2.
-			move(3.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
+			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
 
 			// 2.3.
 			_age += dt;
-			_energy = maintain_in_range(_energy - (18.0 * 1.2 * dt), 0.0, 100.0);
+			_energy = maintain_in_range(_energy - (20.0 * 1.2 * dt), 0.0, 100.0);
 
 			// 2.4.
-			_desire = maintain_in_range(_desire + 30.0 * dt, 0.0, 100.0);
+			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
 
 			// 2.5.
-			if (_pos.distanceTo(_mate_target.get_position()) < 8.0) 
-			{
+			if (_pos.distanceTo(_mate_target.get_position()) < 8.0) {
 				_desire = 0.0;
 				_mate_target._desire = 0.0;
 
@@ -135,22 +133,19 @@ public class Sheep extends Animal {
 				if (_baby == null && Utils._rand.nextDouble() < 0.9)
 					this._baby = new Sheep(this, _mate_target);
 
-				_energy = maintain_in_range(_energy - 10.0, 0.0, 100.0);
 				_mate_target = null;
 			}
 		}
-		
+
 		// 3.
-		if(this._danger_source == null)
+		if (this._danger_source == null)
 			findNewDangerSource();
-		
+
 		// 4.
-		 if (_danger_source != null) {
-		     _state = State.DANGER;
-		     this._mate_target = null;
-		 } 
-		 else if (this._danger_source == null && _desire < 65.0) 
-		    _state = State.NORMAL;
+		if (_danger_source != null)
+			_state = State.DANGER;
+		else if (this._danger_source == null && _desire < 65.0)
+			_state = State.NORMAL;
 	}
 
 	private void adjustPosition() {
@@ -166,9 +161,7 @@ public class Sheep extends Animal {
 
 		if (this._energy == 0.0 || this._age > 8.0)
 			this._state = State.DEAD;
-		
-		else
-		{
+		else {
 			double food = _region_mngr.get_food(this, dt);
 			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
 
@@ -182,9 +175,10 @@ public class Sheep extends Animal {
 			case MATE:
 				handleMateState(dt);
 				break;
-		}
-		if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0 || this._pos.getY() >= _region_mngr.get_height())
-			adjustPosition();
+			}
+			if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0
+					|| this._pos.getY() >= _region_mngr.get_height())
+				adjustPosition();
 		}
 	}
 

@@ -13,7 +13,7 @@ import simulator.model.Wolf;
 public class WolfBuilder extends Builder<Animal> {
 
 	private Factory<SelectionStrategy> selectionStrategyFactory;
-	
+
 	public WolfBuilder(Factory<SelectionStrategy> selection_strategy_factory) {
 		super("wolf", "Un tipo de animal carnivore");
 		this.selectionStrategyFactory = selection_strategy_factory;
@@ -26,14 +26,14 @@ public class WolfBuilder extends Builder<Animal> {
 		Vector2D pos = null;
 
 		if (data.has("mate_strategy")) {
-            JSONObject mateStrategyData = data.getJSONObject("mate_strategy");
-            mate_strategy = selectionStrategyFactory.create_instance(mateStrategyData);
-        }
-		
-		 if (data.has("hunt_strategy")) {
-	            JSONObject dangerStrategyData = data.getJSONObject("hunt_strategy");
-	            hunt_strategy = selectionStrategyFactory.create_instance(dangerStrategyData);
-	     }
+			JSONObject mateStrategyData = data.getJSONObject("mate_strategy");
+			mate_strategy = selectionStrategyFactory.create_instance(mateStrategyData);
+		}
+
+		if (data.has("hunt_strategy")) {
+			JSONObject dangerStrategyData = data.getJSONObject("hunt_strategy");
+			hunt_strategy = selectionStrategyFactory.create_instance(dangerStrategyData);
+		}
 
 		if (data.has("pos")) {
 			JSONObject posObj = data.getJSONObject("pos");

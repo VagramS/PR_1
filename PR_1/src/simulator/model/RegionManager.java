@@ -89,17 +89,16 @@ public class RegionManager implements AnimalMapView {
 
 	public double get_food(Animal a, double dt) {
 		// Calculate which row and column the animal belongs to based on its position
-        int col = (int) a.get_position().getX() / _regionWidth;
-        int row = (int) a.get_position().getY() / _regionHeight;
+		int col = (int) a.get_position().getX() / _regionWidth;
+		int row = (int) a.get_position().getY() / _regionHeight;
 
-        if (row >= 0 && row < _rows && col >= 0 && col < _cols) {
-            Region region = _regions[row][col];
-            return region.get_food(a, dt);
-        } 
-        else {
-            System.err.println("Animal's position is out of the valid region range.");
-            return 0.0;
-        }
+		if (row >= 0 && row < _rows && col >= 0 && col < _cols) {
+			Region region = _regions[row][col];
+			return region.get_food(a, dt);
+		} else {
+			System.err.println("Animal's position is out of the valid region range.");
+			return 0.0;
+		}
 	}
 
 	void update_all_regions(double dt) {

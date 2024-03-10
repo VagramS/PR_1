@@ -49,13 +49,10 @@ public class Wolf extends Animal {
 		_desire = maintain_in_range(_desire + (30.0 * dt), 0.0, 100.0);
 
 		// 2.
-		if (_energy < 50.0) {
+		if (_energy < 50.0)
 			_state = State.HUNGER;
-			_mate_target = null;
-		} else if (_energy >= 50.0 && _desire > 65.0) {
-			_state = State.MATE;
-			_hunt_target = null;
-		}
+		else if (_energy >= 50.0 && _desire > 65.0) 
+			_state = State.MATE;		
 	}
 
 	private void handleHungerState(double dt) {
@@ -93,10 +90,9 @@ public class Wolf extends Animal {
 		}
 
 		// 3.
-		if (_energy > 50.0) {
+		if (_energy > 50.0)	
 			_state = (_desire < 65.0) ? State.NORMAL : State.MATE;
-			_mate_target = null;
-		}
+		
 	}
 
 	private void handleMateState(double dt) {
@@ -146,7 +142,7 @@ public class Wolf extends Animal {
 		// 3.
 		if (_energy < 50.0)
 			_state = State.HUNGER;
-		else if (_desire < 65.0)
+		else if (_energy >= 50.0 && _desire < 65.0)
 			_state = State.NORMAL;
 	}
 
@@ -163,8 +159,7 @@ public class Wolf extends Animal {
 
 		if (this._energy == 0.0 || this._age > 14.0)
 			this._state = State.DEAD;
-		else
-		{
+		else {
 			double food = _region_mngr.get_food(this, dt);
 			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
 
@@ -178,9 +173,9 @@ public class Wolf extends Animal {
 			case MATE:
 				handleMateState(dt);
 				break;
-		}
-		if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0 || this._pos.getY() >= _region_mngr.get_height())
-			adjustPosition();
+			}
+			if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0 || this._pos.getY() >= _region_mngr.get_height())
+				adjustPosition();
 		}
 	}
 

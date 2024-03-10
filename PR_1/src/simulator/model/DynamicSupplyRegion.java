@@ -8,6 +8,7 @@ public class DynamicSupplyRegion extends Region {
 	protected Random rand = new Random();
 
 	public DynamicSupplyRegion(double food, double factor) {
+		super();
 		this._food = food;
 		this._factor = factor;
 	}
@@ -24,11 +25,13 @@ public class DynamicSupplyRegion extends Region {
 			if (animal._diet == Diet.HERBIVORE)
 				n++;
 
-		if (a._diet == Diet.HERBIVORE)
-			this._food = Math.min(_food, 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt);
-		else
-			this._food = 0.0;
+		double food = 0.0;
 
-		return this._food;
+		if (a.get_diet() == Diet.HERBIVORE) {
+			food = Math.min(_food, 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt);
+			_food -= food;
+		}
+
+		return food;
 	}
 }

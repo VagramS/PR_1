@@ -13,7 +13,7 @@ public class SelectYoungestBuilder extends Builder<SelectionStrategy> {
 
 	@Override
 	protected SelectionStrategy create_instance(JSONObject data) {
-		 return new SelectYoungest();
+		return new SelectYoungest();
 	}
 
 }
