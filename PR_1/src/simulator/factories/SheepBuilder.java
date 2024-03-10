@@ -12,8 +12,11 @@ import simulator.model.Sheep;
 
 public class SheepBuilder extends Builder<Animal> {
 
+	 private Factory<SelectionStrategy> selectionStrategyFactory;
+	
 	public SheepBuilder(Factory<SelectionStrategy> selection_strategy_factory) {
 		super("sheep", "Un tipo de animal herbivore");
+		this.selectionStrategyFactory = selection_strategy_factory;
 	}
 
 	protected Animal create_instance(JSONObject data) {
@@ -21,11 +24,15 @@ public class SheepBuilder extends Builder<Animal> {
 		SelectionStrategy danger_strategy = new SelectFirst();
 		Vector2D pos = null;
 
-		if (data.has("mate_strategy"))
-			mate_strategy = (SelectionStrategy) data.get("mate_strategy");
-
-		if (data.has("danger_strategy"))
-			danger_strategy = (SelectionStrategy) data.get("danger_strategy");
+		if (data.has("mate_strategy")) {
+            JSONObject mateStrategyData = data.getJSONObject("mate_strategy");
+            mate_strategy = selectionStrategyFactory.create_instance(mateStrategyData);
+        }
+		
+		 if (data.has("danger_strategy")) {
+	            JSONObject dangerStrategyData = data.getJSONObject("danger_strategy");
+	            danger_strategy = selectionStrategyFactory.create_instance(dangerStrategyData);
+	     }
 
 		if (data.has("pos")) {
 			JSONObject posObj = data.getJSONObject("pos");

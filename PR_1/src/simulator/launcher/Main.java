@@ -29,7 +29,11 @@ public class Main {
 
 	protected static Factory<Animal> _animals_factory;
 	protected static Factory<Region> _regions_factory;
-
+	private static int rows;
+	private static int cols;
+	private static int width;
+	private static int height;
+	
 	private enum ExecMode {
 		BATCH("batch", "Batch mode"), GUI("gui", "Graphical User Interface mode");
 
@@ -164,6 +168,7 @@ public class Main {
 		List<Builder<SelectionStrategy>> selection_strategy_builders = new ArrayList<>();
 		selection_strategy_builders.add(new SelectFirstBuilder());
 		selection_strategy_builders.add(new SelectClosestBuilder());
+		selection_strategy_builders.add(new SelectYoungestBuilder());
 
 		Factory<SelectionStrategy> selection_strategy_factory = new BuilderBasedFactory<>(selection_strategy_builders);
 
@@ -181,13 +186,19 @@ public class Main {
 	private static void start_batch_mode() throws Exception {
 		InputStream is = new FileInputStream(new File(_in_file));
 		JSONObject simulationData = load_JSON_file(is);
+		width = simulationData.getInt("width");
+	    height = simulationData.getInt("height");
+	    cols = simulationData.getInt("cols");
+	    rows = simulationData.getInt("rows");
 		is.close();
+		
+		
 
 		String OutputFileName = "myout.json";
 		OutputStream os = new FileOutputStream(OutputFileName);
 		PrintStream print_stream = new PrintStream(os);
 
-		Simulator _sim = new Simulator(15, 15, 800, 600, _animals_factory, _regions_factory);
+		Simulator _sim = new Simulator(cols, rows, width, height, _animals_factory, _regions_factory);
 		Controller control = new Controller(_sim);
 		control.load_data(simulationData);
 

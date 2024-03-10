@@ -10,7 +10,6 @@
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.util.LinkedList"/>
     <fullyQualifiedTypeName name="simulator.misc.Vector2D"/>
-    <fullyQualifiedTypeName name="simulator.model.SelectFirst"/>
     <fullyQualifiedTypeName name="simulator.model.Sheep"/>
     <fullyQualifiedTypeName name="simulator.misc.Utils"/>
     <fullyQualifiedTypeName name="org.json.JSONArray"/>
@@ -25,6 +24,10 @@
     <fullyQualifiedTypeName name="simulator.model.Animal"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.util.Arrays"/>
-    <fullyQualifiedTypeName name="simulator.model.SelectionStrategy"/>
     <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="simulator.model.SelectionStrategy"/>
+    <fullyQualifiedTypeName name="simulator.model.SelectYoungest"/>
+    <fullyQualifiedTypeName name="simulator.model.SelectClosest"/>
+    <fullyQualifiedTypeName name="simulator.model.SelectFirst"/>
+    <fullyQualifiedTypeName name="simulator.model.Diet"/>
 </qualifiedTypeNameHistroy>

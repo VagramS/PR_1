@@ -8,7 +8,7 @@ import simulator.model.Region;
 public class DynamicSupplyRegionBuilder extends Builder<Region> {
 
 	public DynamicSupplyRegionBuilder() {
-		super("default", "El region que tiene su factor y valor de comida");
+		super("dynamic", "El region que tiene su factor y valor de comida");
 	}
 
 	@Override

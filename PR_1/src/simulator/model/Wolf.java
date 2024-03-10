@@ -28,11 +28,6 @@ public class Wolf extends Animal {
 		return value;
 	}
 
-	private void CheckIfDead() {
-		if (this._energy == 0.0 || this._age > 14.0)
-			this._state = State.DEAD;
-	}
-
 	private void handleNormalState(double dt) {
 		// 1.1.
 		if (_pos.distanceTo(_dest) < 8.0) {
@@ -48,10 +43,10 @@ public class Wolf extends Animal {
 		_age += dt;
 
 		// 1.4.
-		_energy = maintain_in_range(_energy - 18.0 * dt, 0.0, 100.0);
+		_energy = maintain_in_range(_energy - (18.0 * dt), 0.0, 100.0);
 
 		// 1.5.
-		_desire = maintain_in_range(_desire + 30.0 * dt, 0.0, 100.0);
+		_desire = maintain_in_range(_desire + (30.0 * dt), 0.0, 100.0);
 
 		// 2.
 		if (_energy < 50.0) {
@@ -91,7 +86,6 @@ public class Wolf extends Animal {
 
 			// 2.6.
 			if (_pos.distanceTo(_hunt_target.get_position()) < 8.0) {
-				// Successful hunt
 				_hunt_target._state = State.DEAD;
 				_hunt_target = null;
 				_energy = maintain_in_range(_energy + 50.0, 0.0, 100.0);
@@ -101,9 +95,8 @@ public class Wolf extends Animal {
 		// 3.
 		if (_energy > 50.0) {
 			_state = (_desire < 65.0) ? State.NORMAL : State.MATE;
-			_mate_target = null; // Clear mating target when leaving HUNGER state
+			_mate_target = null;
 		}
-		// If energy is less than 50.0, remain in HUNGER state
 	}
 
 	private void handleMateState(double dt) {
@@ -143,7 +136,7 @@ public class Wolf extends Animal {
 
 				// 2.6.
 				if (_baby == null && Utils._rand.nextDouble() < 0.9)
-					_baby = new Wolf(this, _mate_target);
+					this._baby = new Wolf(this, _mate_target);
 
 				_energy = maintain_in_range(_energy - 10.0, 0.0, 100.0);
 				_mate_target = null;
@@ -155,8 +148,6 @@ public class Wolf extends Animal {
 			_state = State.HUNGER;
 		else if (_desire < 65.0)
 			_state = State.NORMAL;
-
-		// Keep _state as MATE if none of the above conditions are met
 	}
 
 	private void adjustPosition() {
@@ -170,23 +161,27 @@ public class Wolf extends Animal {
 		if (this._state == State.DEAD)
 			return;
 
-		CheckIfDead();
+		if (this._energy == 0.0 || this._age > 14.0)
+			this._state = State.DEAD;
+		else
+		{
+			double food = _region_mngr.get_food(this, dt);
+			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
 
-		double food = _region_mngr.get_food(this, dt);
-		this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
-
-		switch (this._state) {
-		case NORMAL:
-			handleNormalState(dt);
-			break;
-		case HUNGER:
-			handleHungerState(dt);
-			break;
-		case MATE:
-			handleMateState(dt);
-			break;
+			switch (this._state) {
+			case NORMAL:
+				handleNormalState(dt);
+				break;
+			case HUNGER:
+				handleHungerState(dt);
+				break;
+			case MATE:
+				handleMateState(dt);
+				break;
 		}
-		adjustPosition();
+		if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0 || this._pos.getY() >= _region_mngr.get_height())
+			adjustPosition();
+		}
 	}
 
 	public State get_state() {
@@ -210,7 +205,7 @@ public class Wolf extends Animal {
 	}
 
 	public double get_sight_range() {
-		return this.get_sight_range();
+		return this._sight_range;
 	}
 
 	public double get_energy() {

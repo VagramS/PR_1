@@ -22,7 +22,7 @@ public abstract class Region implements Entity, FoodSupplier, RegionInfo {
 	}
 
 	final List<Animal> getAnimals() {
-		return new ArrayList<>(_animals);
+		return new ArrayList<Animal>(_animals);
 	}
 
 	public JSONObject as_JSON() {

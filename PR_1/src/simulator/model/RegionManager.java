@@ -62,19 +62,19 @@ public class RegionManager implements AnimalMapView {
 		int row = (int) a._pos.getY() / this.get_region_height();
 
 		if (col >= 0 && col < _cols && row >= 0 && row < _rows) {
-			Region reg = this._regions[row][col];
+			Region reg = _regions[row][col];
 			reg.add_animal(a);
 			this._animal_region.put(a, reg);
 		}
 	}
 
 	void unregister_animal(Animal a) {
-		if (_animal_region.containsKey(a)) {
-			Region region = _animal_region.get(a);
+		int col = (int) a._pos.getX() / this.get_region_width();
+		int row = (int) a._pos.getY() / this.get_region_height();
 
-			if (region != null)
-				region.remove_animal(a);
-
+		if (col >= 0 && col < _cols && row >= 0 && row < _rows) {
+			Region region = _regions[row][col];
+			region.remove_animal(a);
 			_animal_region.remove(a);
 		}
 	}
@@ -88,14 +88,18 @@ public class RegionManager implements AnimalMapView {
 	}
 
 	public double get_food(Animal a, double dt) {
-		Region region = _animal_region.get(a);
+		// Calculate which row and column the animal belongs to based on its position
+        int col = (int) a.get_position().getX() / _regionWidth;
+        int row = (int) a.get_position().getY() / _regionHeight;
 
-		if (region != null)
-			return region.get_food(a, dt);
-		else {
-			System.out.println("This animal isn't included in any region");
-			return 0;
-		}
+        if (row >= 0 && row < _rows && col >= 0 && col < _cols) {
+            Region region = _regions[row][col];
+            return region.get_food(a, dt);
+        } 
+        else {
+            System.err.println("Animal's position is out of the valid region range.");
+            return 0.0;
+        }
 	}
 
 	void update_all_regions(double dt) {

@@ -47,6 +47,7 @@ public abstract class Animal implements Entity, AnimalInfo {
 
 	protected Animal(Animal p1, Animal p2) {
 		this._dest = null;
+		this._age = 0.0;
 		this._baby = null;
 		this._mate_target = null;
 		this._region_mngr = null;
