@@ -16,8 +16,4 @@ public class Utils {
 		double t = (_rand.nextDouble() - 0.5) * 2 * tolerance;
 		return value * (1 + t);
 	}
-
-	public static double nextDouble(double min, double max) {
-		return min + (_rand.nextDouble() * (max - min));
-	}
 }

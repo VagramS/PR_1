@@ -68,16 +68,16 @@ public abstract class Animal implements Entity, AnimalInfo {
 		this._region_mngr = reg_mngr;
 
 		if (_pos == null) {
-			x = Utils.nextDouble(0, _region_mngr.get_width() - 1);
-			y = Utils.nextDouble(0, _region_mngr.get_height() - 1);
+			x = Utils._rand.nextDouble(0, _region_mngr.get_width() - 1);
+			y = Utils._rand.nextDouble(0, _region_mngr.get_height() - 1);
 		} else {
 			x = Utils.constrain_value_in_range(_pos.getX(), 0, _region_mngr.get_width() - 1);
 			y = Utils.constrain_value_in_range(_pos.getY(), 0, _region_mngr.get_height() - 1);
 		}
 		_pos = new Vector2D(x, y);
 
-		double destX = Utils.nextDouble(0, _region_mngr.get_width() - 1);
-		double destY = Utils.nextDouble(0, _region_mngr.get_height() - 1);
+		double destX = Utils._rand.nextDouble(0, _region_mngr.get_width() - 1);
+		double destY = Utils._rand.nextDouble(0, _region_mngr.get_height() - 1);
 		_dest = new Vector2D(destX, destY);
 	}
 

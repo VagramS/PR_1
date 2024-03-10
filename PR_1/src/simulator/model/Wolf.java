@@ -30,8 +30,8 @@ public class Wolf extends Animal {
 
 	private void handleNormalState(double dt) {
 		if (_pos.distanceTo(_dest) < 8.0) {
-			double newX = Utils.nextDouble(0, _region_mngr.get_width() - 1);
-			double newY = Utils.nextDouble(0, _region_mngr.get_height() - 1);
+			double newX = Utils._rand.nextDouble(0, _region_mngr.get_width() - 1);
+			double newY = Utils._rand.nextDouble(0, _region_mngr.get_height() - 1);
 			_dest = new Vector2D(newX, newY);
 		}
 
@@ -48,15 +48,16 @@ public class Wolf extends Animal {
 	}
 
 	private void handleHungerState(double dt) {
-		if (_hunt_target == null || _hunt_target.get_state() == State.DEAD || _pos.distanceTo(_hunt_target.get_position()) > _sight_range) {
-			List<Animal> potentialTargets = _region_mngr.get_animals_in_range(this, animal -> animal.get_diet() == Diet.HERBIVORE);
+		if (_hunt_target == null || _hunt_target.get_state() == State.DEAD
+				|| _pos.distanceTo(_hunt_target.get_position()) > _sight_range) {
+			List<Animal> potentialTargets = _region_mngr.get_animals_in_range(this,
+					animal -> animal.get_diet() == Diet.HERBIVORE);
 			_hunt_target = _hunting_strategy.select(this, potentialTargets);
 		}
 
 		if (_hunt_target == null)
 			handleNormalState(dt);
-		else 
-		{
+		else {
 			_dest = _hunt_target.get_position();
 
 			move(3.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
@@ -76,11 +77,13 @@ public class Wolf extends Animal {
 	}
 
 	private void handleMateState(double dt) {
-		if (_mate_target != null && (_mate_target.get_state() == State.DEAD || _pos.distanceTo(_mate_target.get_position()) > _sight_range))
+		if (_mate_target != null && (_mate_target.get_state() == State.DEAD
+				|| _pos.distanceTo(_mate_target.get_position()) > _sight_range))
 			_mate_target = null;
 
 		if (_mate_target == null) {
-			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this, animal -> animal.get_genetic_code().equals(this._genetic_code));
+			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this,
+					animal -> animal.get_genetic_code().equals(this._genetic_code));
 			_mate_target = _mate_strategy.select(this, potentialMates);
 
 			if (_mate_target == null)
@@ -131,8 +134,7 @@ public class Wolf extends Animal {
 			double food = _region_mngr.get_food(this, dt);
 			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
 
-			switch (this._state) 
-			{
+			switch (this._state) {
 			case NORMAL:
 				handleNormalState(dt);
 				break;

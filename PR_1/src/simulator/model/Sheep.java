@@ -39,8 +39,8 @@ public class Sheep extends Animal {
 
 	private void handleNormalState(double dt) {
 		if (_pos.distanceTo(_dest) < 8.0) {
-			double x = Utils.nextDouble(0, _region_mngr.get_width());
-			double y = Utils.nextDouble(0, _region_mngr.get_height());
+			double x = Utils._rand.nextDouble(0, _region_mngr.get_width());
+			double y = Utils._rand.nextDouble(0, _region_mngr.get_height());
 			_dest = new Vector2D(x, y);
 		}
 
@@ -88,18 +88,19 @@ public class Sheep extends Animal {
 	}
 
 	private void handleMateState(double dt) {
-		if (_mate_target != null && (_mate_target.get_state() == State.DEAD || _pos.distanceTo(_mate_target.get_position()) > _sight_range))
+		if (_mate_target != null && (_mate_target.get_state() == State.DEAD
+				|| _pos.distanceTo(_mate_target.get_position()) > _sight_range))
 			_mate_target = null;
 
 		if (_mate_target == null) {
-			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this, animal -> animal.get_genetic_code().equals(this._genetic_code));
+			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this,
+					animal -> animal.get_genetic_code().equals(this._genetic_code));
 			_mate_target = _mate_strategy.select(this, potentialMates);
 
 			if (_mate_target == null)
 				handleNormalState(dt);
 		}
-		if (_mate_target != null) 
-		{
+		if (_mate_target != null) {
 			_dest = _mate_target.get_position();
 
 			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
