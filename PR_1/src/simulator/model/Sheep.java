@@ -38,7 +38,6 @@ public class Sheep extends Animal {
 	}
 
 	private void handleNormalState(double dt) {
-		// 1.1
 		if (_pos.distanceTo(_dest) < 8.0) {
 			double x = Utils.nextDouble(0, _region_mngr.get_width());
 			double y = Utils.nextDouble(0, _region_mngr.get_height());
@@ -53,7 +52,7 @@ public class Sheep extends Animal {
 
 		if (this._danger_source == null)
 			findNewDangerSource();
-		
+
 		if (this._danger_source == null && this._desire > 65.0)
 			_state = State.MATE;
 		else if (this._danger_source != null)
@@ -61,30 +60,23 @@ public class Sheep extends Animal {
 	}
 
 	private void handleDangerState(double dt) {
-		// 1.
 		if (_danger_source != null && (_danger_source.get_state() == State.DEAD || !isInSightRange(_danger_source)))
 			_danger_source = null;
 
-		// 2.
 		if (_danger_source == null)
 			handleNormalState(dt);
 		else {
-			// 2.1
 			Vector2D escapeDirection = _pos.minus(_danger_source.get_position()).direction();
 			_dest = _pos.plus(escapeDirection.scale(100));
 
-			// 2.2
 			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
 
-			// 2.3
 			_age += dt;
 			_energy = maintain_in_range(_energy - 20.0 * dt, 0.0, 100.0);
 			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
 		}
 
-		// 3.
 		if (_danger_source == null || !isInSightRange(_danger_source)) {
-			// 3.1
 			_danger_source = findNewDangerSource();
 			if (_danger_source == null) {
 				if (_desire < 65.0)
@@ -96,52 +88,39 @@ public class Sheep extends Animal {
 	}
 
 	private void handleMateState(double dt) {
-		// 1.
-		if (_mate_target != null && (_mate_target.get_state() == State.DEAD
-				|| _pos.distanceTo(_mate_target.get_position()) > _sight_range))
+		if (_mate_target != null && (_mate_target.get_state() == State.DEAD || _pos.distanceTo(_mate_target.get_position()) > _sight_range))
 			_mate_target = null;
 
-		// 2.
 		if (_mate_target == null) {
-			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this,
-					animal -> animal.get_genetic_code().equals(this._genetic_code));
+			List<Animal> potentialMates = _region_mngr.get_animals_in_range(this, animal -> animal.get_genetic_code().equals(this._genetic_code));
 			_mate_target = _mate_strategy.select(this, potentialMates);
 
 			if (_mate_target == null)
 				handleNormalState(dt);
 		}
-		if (_mate_target != null) {
-			// 2.1.
+		if (_mate_target != null) 
+		{
 			_dest = _mate_target.get_position();
 
-			// 2.2.
 			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
 
-			// 2.3.
 			_age += dt;
 			_energy = maintain_in_range(_energy - (20.0 * 1.2 * dt), 0.0, 100.0);
-
-			// 2.4.
 			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
 
-			// 2.5.
 			if (_pos.distanceTo(_mate_target.get_position()) < 8.0) {
 				_desire = 0.0;
 				_mate_target._desire = 0.0;
 
-				// 2.6.
 				if (_baby == null && Utils._rand.nextDouble() < 0.9)
 					this._baby = new Sheep(this, _mate_target);
-
 				_mate_target = null;
 			}
 		}
 
-		// 3.
 		if (this._danger_source == null)
 			findNewDangerSource();
 
-		// 4.
 		if (_danger_source != null)
 			_state = State.DANGER;
 		else if (this._danger_source == null && _desire < 65.0)

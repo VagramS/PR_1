@@ -11,7 +11,6 @@ public class SelectClosestBuilder extends Builder<SelectionStrategy> {
 		super("closest", "Elige el animal mas cercano");
 	}
 
-	@Override
 	protected SelectionStrategy create_instance(JSONObject data) {
 		return new SelectClosest();
 	}

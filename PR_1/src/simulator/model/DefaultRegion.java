@@ -15,8 +15,8 @@ public class DefaultRegion extends Region {
 		}
 
 		if (a._diet == Diet.HERBIVORE)
-			_food = 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt; // n es el número de animales herbívoros en la
-																		// región
+			_food = 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt; // n es el número de animales herbívoros en la región
+																		
 		else
 			_food = 0.0;
 

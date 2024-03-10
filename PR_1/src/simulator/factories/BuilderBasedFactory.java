@@ -14,7 +14,7 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 
 	public BuilderBasedFactory() {
 		// Create a HashMap for _builders, and a LinkedList _builders_info
-
+		
 		_builders = new HashMap<>();
 		_builders_info = new LinkedList<JSONObject>();
 	}
@@ -23,18 +23,16 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 		this();
 		// call add_builder(b) for each builder b in builder
 		builders.forEach(this::add_builder);
-
 	}
 
 	public void add_builder(Builder<T> b) {
 		// add an entry “b.getTag() |−> b” to _builders.
 		// add b.get_info() to _builders_info
-
+		
 		_builders.put(b.get_type_tag(), b);
 		_builders_info.add(b.get_info());
 	}
 
-	@Override
 	public T create_instance(JSONObject info) {
 		if (info == null) {
 			throw new IllegalArgumentException("’info’ cannot be null");

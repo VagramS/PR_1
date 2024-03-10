@@ -167,14 +167,14 @@ public class Main {
 			throw new ParseException("Invalid value for time: " + t);
 		}
 	}
-	
+
 	private static void parse_simple_viewer_option(CommandLine line) {
 		if (line.hasOption("sv"))
 			_simpleViewer = true;
 		else
 			_simpleViewer = false;
 	}
-	
+
 	private static void parse_delta_time_option(CommandLine line) throws ParseException {
 		String dt = line.getOptionValue("dt", _default_delta_time.toString());
 		try {

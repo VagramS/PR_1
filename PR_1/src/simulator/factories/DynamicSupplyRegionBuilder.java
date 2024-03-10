@@ -11,7 +11,6 @@ public class DynamicSupplyRegionBuilder extends Builder<Region> {
 		super("dynamic", "El region que tiene su factor y valor de comida");
 	}
 
-	@Override
 	protected Region create_instance(JSONObject data) {
 		double factor = 2.0;
 		double food = 1000.0;

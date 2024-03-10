@@ -88,7 +88,6 @@ public class RegionManager implements AnimalMapView {
 	}
 
 	public double get_food(Animal a, double dt) {
-		// Calculate which row and column the animal belongs to based on its position
 		int col = (int) a.get_position().getX() / _regionWidth;
 		int row = (int) a.get_position().getY() / _regionHeight;
 

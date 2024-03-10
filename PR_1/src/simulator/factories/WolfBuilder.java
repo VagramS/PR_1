@@ -19,7 +19,6 @@ public class WolfBuilder extends Builder<Animal> {
 		this.selectionStrategyFactory = selection_strategy_factory;
 	}
 
-	@Override
 	protected Animal create_instance(JSONObject data) {
 		SelectionStrategy mate_strategy = new SelectFirst();
 		SelectionStrategy hunt_strategy = new SelectFirst();

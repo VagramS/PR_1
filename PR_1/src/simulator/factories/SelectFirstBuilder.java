@@ -11,7 +11,6 @@ public class SelectFirstBuilder extends Builder<SelectionStrategy> {
 		super("first", "Elige el primer animal de la region");
 	}
 
-	@Override
 	protected SelectionStrategy create_instance(JSONObject data) {
 		return new SelectFirst();
 	}

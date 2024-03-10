@@ -74,11 +74,10 @@ public class Controller {
 		try {
 			PrintStream p = new PrintStream(out);
 			p.println(res.toString(4));
-		} 
-		catch (Exception e) {
-				e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
+
 		if (sv)
 			view.close();
 	}

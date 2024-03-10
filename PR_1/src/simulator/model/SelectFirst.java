@@ -10,5 +10,4 @@ public class SelectFirst implements SelectionStrategy {
 		else
 			return as.get(0);
 	}
-
 }

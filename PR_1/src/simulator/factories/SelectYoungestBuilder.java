@@ -11,7 +11,6 @@ public class SelectYoungestBuilder extends Builder<SelectionStrategy> {
 		super("youngest", "Elige el animal mas joven");
 	}
 
-	@Override
 	protected SelectionStrategy create_instance(JSONObject data) {
 		return new SelectYoungest();
 	}
