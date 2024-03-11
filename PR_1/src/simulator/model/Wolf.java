@@ -6,11 +6,34 @@ import simulator.misc.Utils;
 import simulator.misc.Vector2D;
 
 public class Wolf extends Animal {
+
+	final static double SIGHT_RANGE_INIT = 50.0;
+	final static double SPEED_INIT = 60.0;
+	final static double MAX_AGE = 14.0;
+	final static double MIN_ENERGY = 0.0;
+	final static double MAX_ENERGY = 100.0;
+	final static double MIN_DESIRE = 0.0;
+	final static double MAX_DESIRE = 100.0;
+	final static double DIST_DEST = 8.0;
+	final static double DIST_MATE = 8.0;
+	final static double DIST_HUNT_TARGET = 8.0;
+	final static double ENERGY_TO_REST = 18.0;
+	final static double ENERGY_TO_REST_MATE = 10.0;
+	final static double ENERGY_TO_ADD = 50.0;
+	final static double ENERGY_FACTOR = 1.2;
+	final static double DESIRE_TO_ADD = 30.0;
+	final static double DESIRE_BOUND = 65.0;
+	final static double ENERGY_BOUND = 50.0;
+	final static double MOVE_PARAM1 = 3.0;
+	final static double MOVE_PARAM2 = 100.0;
+	final static double MOVE_PARAM3 = 0.007;
+	final static double BABY_CHANCE = 0.9;
+
 	protected Animal _hunt_target;
 	protected SelectionStrategy _hunting_strategy;
 
 	public Wolf(SelectionStrategy mate_strategy, SelectionStrategy hunting_strategy, Vector2D pos) {
-		super("Wolf", Diet.CARNIVORE, 50.0, 60.0, mate_strategy, pos);
+		super("Wolf", Diet.CARNIVORE, SIGHT_RANGE_INIT, SPEED_INIT, mate_strategy, pos);
 		_hunting_strategy = hunting_strategy;
 	}
 
@@ -29,21 +52,21 @@ public class Wolf extends Animal {
 	}
 
 	private void handleNormalState(double dt) {
-		if (_pos.distanceTo(_dest) < 8.0) {
+		if (_pos.distanceTo(_dest) < DIST_DEST) {
 			double newX = Utils._rand.nextDouble(0, _region_mngr.get_width() - 1);
 			double newY = Utils._rand.nextDouble(0, _region_mngr.get_height() - 1);
 			_dest = new Vector2D(newX, newY);
 		}
 
-		move(_speed * dt * Math.exp((_energy - 100.0) * 0.007));
+		move(_speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 		_age += dt;
-		_energy = maintain_in_range(_energy - (18.0 * dt), 0.0, 100.0);
-		_desire = maintain_in_range(_desire + (30.0 * dt), 0.0, 100.0);
+		_energy = maintain_in_range(_energy - (ENERGY_TO_REST * dt), MIN_ENERGY, MAX_ENERGY);
+		_desire = maintain_in_range(_desire + (DESIRE_TO_ADD * dt), MIN_DESIRE, MAX_DESIRE);
 
-		if (_energy < 50.0)
+		if (_energy < ENERGY_BOUND)
 			_state = State.HUNGER;
-		else if (_energy >= 50.0 && _desire > 65.0)
+		else if (_energy >= ENERGY_BOUND && _desire > DESIRE_BOUND)
 			_state = State.MATE;
 	}
 
@@ -60,20 +83,20 @@ public class Wolf extends Animal {
 		else {
 			_dest = _hunt_target.get_position();
 
-			move(3.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
+			move(MOVE_PARAM1 * _speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 			_age += dt;
-			_energy = maintain_in_range(_energy - (18.0 * 1.2 * dt), 0.0, 100.0);
-			_desire = maintain_in_range(_desire + 30.0 * dt, 0.0, 100.0);
+			_energy = maintain_in_range(_energy - (ENERGY_TO_REST * ENERGY_FACTOR * dt), MIN_ENERGY, MAX_ENERGY);
+			_desire = maintain_in_range(_desire + DESIRE_TO_ADD * dt, MIN_DESIRE, MAX_DESIRE);
 
-			if (_pos.distanceTo(_hunt_target.get_position()) < 8.0) {
+			if (_pos.distanceTo(_hunt_target.get_position()) < DIST_HUNT_TARGET) {
 				_hunt_target._state = State.DEAD;
 				_hunt_target = null;
-				_energy = maintain_in_range(_energy + 50.0, 0.0, 100.0);
+				_energy = maintain_in_range(_energy + ENERGY_TO_ADD, MIN_ENERGY, MAX_ENERGY);
 			}
 		}
-		if (_energy > 50.0)
-			_state = (_desire < 65.0) ? State.NORMAL : State.MATE;
+		if (_energy > ENERGY_BOUND)
+			_state = (_desire < DESIRE_BOUND) ? State.NORMAL : State.MATE;
 	}
 
 	private void handleMateState(double dt) {
@@ -93,27 +116,27 @@ public class Wolf extends Animal {
 		if (_mate_target != null) {
 			_dest = _mate_target.get_position();
 
-			move(3.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
+			move(MOVE_PARAM1 * _speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 			_age += dt;
-			_energy = maintain_in_range(_energy - (18.0 * 1.2 * dt), 0.0, 100.0);
-			_desire = maintain_in_range(_desire + 30.0 * dt, 0.0, 100.0);
+			_energy = maintain_in_range(_energy - (ENERGY_TO_REST * ENERGY_FACTOR * dt), MIN_ENERGY, MAX_ENERGY);
+			_desire = maintain_in_range(_desire + DESIRE_TO_ADD * dt, MIN_DESIRE, MAX_DESIRE);
 
-			if (_pos.distanceTo(_mate_target.get_position()) < 8.0) {
+			if (_pos.distanceTo(_mate_target.get_position()) < DIST_MATE) {
 				_desire = 0.0;
 				_mate_target._desire = 0.0;
 
-				if (_baby == null && Utils._rand.nextDouble() < 0.9)
+				if (_baby == null && Utils._rand.nextDouble() < BABY_CHANCE)
 					this._baby = new Wolf(this, _mate_target);
 
-				_energy = maintain_in_range(_energy - 10.0, 0.0, 100.0);
+				_energy = maintain_in_range(_energy - ENERGY_TO_REST_MATE, MIN_ENERGY, MAX_ENERGY);
 				_mate_target = null;
 			}
 		}
 
-		if (_energy < 50.0)
+		if (_energy < ENERGY_BOUND)
 			_state = State.HUNGER;
-		else if (_energy >= 50.0 && _desire < 65.0)
+		else if (_energy >= ENERGY_BOUND && _desire < DESIRE_BOUND)
 			_state = State.NORMAL;
 	}
 
@@ -128,11 +151,11 @@ public class Wolf extends Animal {
 		if (this._state == State.DEAD)
 			return;
 
-		if (this._energy == 0.0 || this._age > 14.0)
+		if (this._energy == 0.0 || this._age > MAX_AGE)
 			this._state = State.DEAD;
 		else {
 			double food = _region_mngr.get_food(this, dt);
-			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
+			this._energy = maintain_in_range(this._energy + food, MIN_ENERGY, MAX_ENERGY);
 
 			switch (this._state) {
 			case NORMAL:
@@ -143,6 +166,8 @@ public class Wolf extends Animal {
 				break;
 			case MATE:
 				handleMateState(dt);
+				break;
+			default:
 				break;
 			}
 			if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0

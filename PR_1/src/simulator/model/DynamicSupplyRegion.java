@@ -3,6 +3,11 @@ package simulator.model;
 import java.util.Random;
 
 public class DynamicSupplyRegion extends Region {
+
+	final static double FOOD_PARAM1 = 60.0;
+	final static double FOOD_PARAM2 = 5.0;
+	final static double FOOD_PARAM3 = 2.0;
+
 	protected double _food;
 	protected double _factor;
 	protected Random rand = new Random();
@@ -28,7 +33,7 @@ public class DynamicSupplyRegion extends Region {
 		double food = 0.0;
 
 		if (a.get_diet() == Diet.HERBIVORE) {
-			food = Math.min(_food, 60.0 * Math.exp(-Math.max(0, n - 5.0) * 2.0) * dt);
+			food = Math.min(_food, FOOD_PARAM1 * Math.exp(-Math.max(0, n - FOOD_PARAM2) * FOOD_PARAM3) * dt);
 			_food -= food;
 		}
 

@@ -62,8 +62,7 @@ public class Controller {
 
 		while (_sim.get_time() < t) {
 			_sim.advance(dt);
-			if (sv)
-				view.update(to_animals_info(_sim.get_animals()), _sim.get_time(), dt);
+			if(sv)	view.update(to_animals_info(_sim.get_animals()), _sim.get_time(), dt);
 		}
 		JSONObject final_state = _sim.as_JSON();
 
@@ -78,8 +77,7 @@ public class Controller {
 			e.printStackTrace();
 		}
 
-		if (sv)
-			view.close();
+		view.close();
 	}
 
 	public record ObjInfo(String tag, int x, int y, int size) {

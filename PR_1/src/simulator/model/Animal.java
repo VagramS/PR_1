@@ -1,5 +1,7 @@
 package simulator.model;
 
+import java.util.Arrays;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import simulator.misc.Utils;
@@ -7,6 +9,9 @@ import simulator.misc.Vector2D;
 
 public abstract class Animal implements Entity, AnimalInfo {
 	final static double INIT_ENERGY = 100.0;
+	final static double SPEED_PARAM = 0.1;
+	final static double POS_PARAM = 60.0;
+	final static double SIGHT_RANGE_SPEED_PARAM = 0.2;
 
 	protected String _genetic_code;
 	protected Diet _diet;
@@ -31,7 +36,7 @@ public abstract class Animal implements Entity, AnimalInfo {
 		this._genetic_code = genetic_code;
 		this._diet = diet;
 		this._sight_range = sight_range;
-		this._speed = Utils.get_randomized_parameter(init_speed, 0.1);
+		this._speed = Utils.get_randomized_parameter(init_speed, SPEED_PARAM);
 		this._mate_strategy = mate_strategy;
 		this._pos = pos;
 
@@ -58,9 +63,10 @@ public abstract class Animal implements Entity, AnimalInfo {
 		this._energy = (p1._energy + p2._energy) / 2;
 		this._mate_strategy = p2._mate_strategy;
 		this._pos = p1.get_position()
-				.plus(Vector2D.get_random_vector(-1, 1).scale(60.0 * (Utils._rand.nextGaussian() + 1)));
-		this._sight_range = Utils.get_randomized_parameter((p1.get_sight_range() + p2.get_sight_range()) / 2, 0.2);
-		this._speed = Utils.get_randomized_parameter((p1.get_speed() + p2.get_speed()) / 2, 0.2);
+				.plus(Vector2D.get_random_vector(-1, 1).scale(POS_PARAM * (Utils._rand.nextGaussian() + 1)));
+		this._sight_range = Utils.get_randomized_parameter((p1.get_sight_range() + p2.get_sight_range()) / 2,
+				SIGHT_RANGE_SPEED_PARAM);
+		this._speed = Utils.get_randomized_parameter((p1.get_speed() + p2.get_speed()) / 2, SIGHT_RANGE_SPEED_PARAM);
 	}
 
 	void init(AnimalMapView reg_mngr) {
@@ -94,9 +100,9 @@ public abstract class Animal implements Entity, AnimalInfo {
 
 	public JSONObject as_JSON() {
 		JSONObject obj = new JSONObject();
-		JSONArray posArray = this._pos.asJSONArray();
+		JSONArray posArray = new JSONArray(Arrays.asList(_pos.getX(), _pos.getY()));
 
-		obj.put("pos", posArray);
+		obj.put("pos", posArray.toString());
 		obj.put("gcode", _genetic_code);
 		obj.put("diet", _diet);
 		obj.put("state", _state);

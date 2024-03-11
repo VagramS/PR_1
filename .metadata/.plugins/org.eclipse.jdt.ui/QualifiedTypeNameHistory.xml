@@ -23,11 +23,11 @@
     <fullyQualifiedTypeName name="simulator.model.Region"/>
     <fullyQualifiedTypeName name="simulator.model.Animal"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="java.util.Arrays"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="simulator.model.SelectionStrategy"/>
     <fullyQualifiedTypeName name="simulator.model.SelectYoungest"/>
     <fullyQualifiedTypeName name="simulator.model.SelectClosest"/>
     <fullyQualifiedTypeName name="simulator.model.SelectFirst"/>
     <fullyQualifiedTypeName name="simulator.model.Diet"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
 </qualifiedTypeNameHistroy>

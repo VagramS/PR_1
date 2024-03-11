@@ -111,9 +111,7 @@ public class RegionManager implements AnimalMapView {
 
 	public List<Animal> get_animals_in_range(Animal a, Predicate<Animal> filter) {
 		List<Animal> animalsInRange = _animal_region.keySet().stream()
-				// First filter: Check if the animal is within the sight range of 'a'
 				.filter(animal -> animal.get_position().distanceTo(a.get_position()) <= a.get_sight_range())
-				// Second filter: Apply the additional provided filter
 				.filter(filter).collect(Collectors.toList());
 
 		return animalsInRange;
@@ -128,7 +126,6 @@ public class RegionManager implements AnimalMapView {
 				region.put("row", i);
 				region.put("col", j);
 				region.put("data", _regions[i][j].as_JSON());
-
 				regArray.put(region);
 			}
 		}

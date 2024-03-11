@@ -6,11 +6,30 @@ import simulator.misc.Utils;
 import simulator.misc.Vector2D;
 
 public class Sheep extends Animal {
+
+	final static double SIGHT_RANGE_INIT = 40.0;
+	final static double SPEED_INIT = 35.0;
+	final static double MAX_AGE = 8.0;
+	final static double MIN_ENERGY = 0.0;
+	final static double MAX_ENERGY = 100.0;
+	final static double MIN_DESIRE = 0.0;
+	final static double MAX_DESIRE = 100.0;
+	final static double DIST_DEST = 8.0;
+	final static double DIST_MATE = 8.0;
+	final static double ENERGY_TO_REST = 20.0;
+	final static double ENERGY_FACTOR = 1.2;
+	final static double DESIRE_TO_ADD = 40.0;
+	final static double DESIRE_BOUND = 65.0;
+	final static double MOVE_PARAM1 = 2.0;
+	final static double MOVE_PARAM2 = 100.0;
+	final static double MOVE_PARAM3 = 0.007;
+	final static double BABY_CHANCE = 0.9;
+
 	protected Animal _danger_source;
 	protected SelectionStrategy _danger_strategy;
 
 	public Sheep(SelectionStrategy mate_strategy, SelectionStrategy danger_strategy, Vector2D pos) {
-		super("Sheep", Diet.HERBIVORE, 40.0, 35.0, mate_strategy, pos);
+		super("Sheep", Diet.HERBIVORE, SIGHT_RANGE_INIT, SPEED_INIT, mate_strategy, pos);
 		this._danger_strategy = danger_strategy;
 	}
 
@@ -38,22 +57,22 @@ public class Sheep extends Animal {
 	}
 
 	private void handleNormalState(double dt) {
-		if (_pos.distanceTo(_dest) < 8.0) {
+		if (_pos.distanceTo(_dest) < DIST_DEST) {
 			double x = Utils._rand.nextDouble(0, _region_mngr.get_width());
 			double y = Utils._rand.nextDouble(0, _region_mngr.get_height());
 			_dest = new Vector2D(x, y);
 		}
 
-		move(_speed * dt * Math.exp((_energy - 100.0) * 0.007));
+		move(_speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 		_age += dt;
-		_energy = maintain_in_range(_energy - 20.0 * dt, 0.0, 100.0);
-		_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
+		_energy = maintain_in_range(_energy - ENERGY_TO_REST * dt, MIN_ENERGY, MAX_ENERGY);
+		_desire = maintain_in_range(_desire + DESIRE_TO_ADD * dt, MIN_DESIRE, MAX_DESIRE);
 
 		if (this._danger_source == null)
 			findNewDangerSource();
 
-		if (this._danger_source == null && this._desire > 65.0)
+		if (this._danger_source == null && this._desire > DESIRE_BOUND)
 			_state = State.MATE;
 		else if (this._danger_source != null)
 			_state = State.DANGER;
@@ -69,17 +88,17 @@ public class Sheep extends Animal {
 			Vector2D escapeDirection = _pos.minus(_danger_source.get_position()).direction();
 			_dest = _pos.plus(escapeDirection.scale(100));
 
-			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
+			move(MOVE_PARAM1 * _speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 			_age += dt;
-			_energy = maintain_in_range(_energy - 20.0 * dt, 0.0, 100.0);
-			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
+			_energy = maintain_in_range(_energy - ENERGY_TO_REST * ENERGY_FACTOR * dt, MIN_ENERGY, MAX_ENERGY);
+			_desire = maintain_in_range(_desire + DESIRE_TO_ADD * dt, MIN_DESIRE, MAX_DESIRE);
 		}
 
 		if (_danger_source == null || !isInSightRange(_danger_source)) {
 			_danger_source = findNewDangerSource();
 			if (_danger_source == null) {
-				if (_desire < 65.0)
+				if (_desire < DESIRE_BOUND)
 					_state = State.NORMAL;
 				else
 					_state = State.MATE;
@@ -103,17 +122,17 @@ public class Sheep extends Animal {
 		if (_mate_target != null) {
 			_dest = _mate_target.get_position();
 
-			move(2.0 * _speed * dt * Math.exp((_energy - 100.0) * 0.007));
+			move(MOVE_PARAM1 * _speed * dt * Math.exp((_energy - MOVE_PARAM2) * MOVE_PARAM3));
 
 			_age += dt;
-			_energy = maintain_in_range(_energy - (20.0 * 1.2 * dt), 0.0, 100.0);
-			_desire = maintain_in_range(_desire + 40.0 * dt, 0.0, 100.0);
+			_energy = maintain_in_range(_energy - (ENERGY_TO_REST * ENERGY_FACTOR * dt), MIN_ENERGY, MAX_ENERGY);
+			_desire = maintain_in_range(_desire + DESIRE_TO_ADD * dt, MIN_DESIRE, MAX_DESIRE);
 
-			if (_pos.distanceTo(_mate_target.get_position()) < 8.0) {
+			if (_pos.distanceTo(_mate_target.get_position()) < DIST_MATE) {
 				_desire = 0.0;
 				_mate_target._desire = 0.0;
 
-				if (_baby == null && Utils._rand.nextDouble() < 0.9)
+				if (_baby == null && Utils._rand.nextDouble() < BABY_CHANCE)
 					this._baby = new Sheep(this, _mate_target);
 				_mate_target = null;
 			}
@@ -124,7 +143,7 @@ public class Sheep extends Animal {
 
 		if (_danger_source != null)
 			_state = State.DANGER;
-		else if (this._danger_source == null && _desire < 65.0)
+		else if (this._danger_source == null && _desire < DESIRE_BOUND)
 			_state = State.NORMAL;
 	}
 
@@ -139,11 +158,11 @@ public class Sheep extends Animal {
 		if (this._state == State.DEAD)
 			return;
 
-		if (this._energy == 0.0 || this._age > 8.0)
+		if (this._energy == 0.0 || this._age > MAX_AGE)
 			this._state = State.DEAD;
 		else {
 			double food = _region_mngr.get_food(this, dt);
-			this._energy = maintain_in_range(this._energy + food, 0.0, 100.0);
+			this._energy = maintain_in_range(this._energy + food, MIN_ENERGY, MAX_ENERGY);
 
 			switch (this._state) {
 			case NORMAL:
@@ -154,6 +173,8 @@ public class Sheep extends Animal {
 				break;
 			case MATE:
 				handleMateState(dt);
+				break;
+			default:
 				break;
 			}
 			if (this._pos.getX() < 0 || this._pos.getX() >= _region_mngr.get_width() || this._pos.getY() < 0
